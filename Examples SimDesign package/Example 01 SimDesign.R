@@ -9,6 +9,8 @@
 
 library(SimDesign)
 
+SimFunctions()
+
 
 # Define the conditions ---------------------------------------------------
 
@@ -64,8 +66,11 @@ Summarise <- function(condition, results, fixed_objects = NULL) {
 
 # Putting it all together -------------------------------------------------
 
-res <- runSimulation(Design, replications = 1000, generate=Generate, 
-                     analyse=Analyse, summarise=Summarise)
+res <- runSimulation(design = Design, 
+                     replications = 1000, 
+                     generate = Generate, 
+                     analyse = Analyse, 
+                     summarise = Summarise)
 
 res
 
@@ -74,5 +79,24 @@ res
 
 REs <- res[,grepl('RE\\.', colnames(res))]
 data.frame(Design, REs)
+
+# To analize the results --------------------------------------------------
+
+library("ggplot2")
+library("dplyr")
+library("tidyr")
+
+# Gather results:
+table_gather <- table %>% gather(measure,value,interceptBias:slopeBias)
+
+# Plot:
+ggplot(res, aes(x=factor(sample_size), y=value, fill = measure)) + 
+  geom_boxplot(outlier.size = 0.5,lwd=0.5,fatten=0.5) + 
+  xlab("Sample Size") + 
+  ylab("Bias") + 
+  theme_bw() + 
+  theme( panel.grid.major.x = element_blank(),panel.grid.minor.x = element_blank()) +
+  geom_vline(xintercept=seq(1.5, length(unique(table_gather$sampleSize))-0.5, 1),
+             lwd=0.5, colour="black", alpha = 0.25) 
 
 
