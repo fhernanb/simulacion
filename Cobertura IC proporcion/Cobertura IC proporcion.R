@@ -32,7 +32,7 @@ simul <- function(nsim, prop, n, conf) {
   results <- cbind(mean(res), prop, n, conf)
   write(x=t(results), 
         file='Cobertura IC proporcion/results_prop.txt', 
-        ncolumns=4, append=T)
+        ncolumns=4, append=TRUE)
 }
 
 # To simulate -------------------------------------------------------------
@@ -71,17 +71,24 @@ myplot <- function(n, conf) {
   abline(h=conf, col='red')
 }
 
-myplot(5, 0.95)
+# Replicando algunas figuras del articulo
 
+par(mfrow=c(2, 3))
+
+myplot( 5, 0.95)
+myplot(10, 0.95)
+myplot(20, 0.95)
+
+myplot( 5, 0.99)
+myplot(10, 0.99)
+myplot(20, 0.99)
 
 
 # Cobertura versus n
 
-dt <- subset(datos, true.prop == 0.10 & conf == 0.90)
-#dt <- dt[order(dt$n), ]
+dt <- subset(datos, true.prop == 0.10 & conf == 0.95)
+dt <- dt[order(dt$n), ]
 with(dt, plot(x=n, y=cover, type='b', las=1,
               ylab='Coverage rate'))
-
-
 
 
