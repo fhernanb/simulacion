@@ -26,7 +26,7 @@ simul <- function(nsim, n) {
   results <- replicate(n=nsim, one.simul(n=n))
   results <- cbind(t(results), n=n)
   write(x=t(results), 
-        file='Comportamiento estimadores en RLS/results.txt', 
+        file='Comportamiento betas lm/results.txt', 
         ncolumns=4, append=T)
 }
 
