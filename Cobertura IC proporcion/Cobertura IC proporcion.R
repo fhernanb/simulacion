@@ -1,4 +1,19 @@
-# URL for paper
+# In this example we are interested measure the coverage rate for two
+# IC to estimate the proportion P in a Binomial(n, p)
+
+# Factors to study
+# n = 10, 20, 30, ..., 980, 990, 1000
+# p = 0.01, 0.02, ..., 0.98, 0.99
+# confidence levels = 0.95, 0.99
+# IC = Wald and Agresti-Caffo
+
+# Fixed factor:
+# The way to generate samples from a Binomial(n, p)
+
+# Variables to monitor
+# ^beta0, ^beta1 and ^sigma
+
+# URL for the paper
 # http://www.stat.ufl.edu/~aa/articles/agresti_caffo_2000.pdf
 
 # Exploring ---------------------------------------------------------------
@@ -51,7 +66,6 @@ lapply(1:NROW(params), function(i) {
   simul(nsim=nsim, prop=r[1], n=r[2], conf=r[3])
 })
 
-
 # To plot the results -----------------------------------------------------
 
 datos <- read.table('Cobertura IC proporcion/results_prop.txt')
@@ -83,12 +97,10 @@ myplot( 5, 0.99)
 myplot(10, 0.99)
 myplot(20, 0.99)
 
-
 # Cobertura versus n
 
 dt <- subset(datos, true.prop == 0.10 & conf == 0.95)
 dt <- dt[order(dt$n), ]
 with(dt, plot(x=n, y=cover, type='b', las=1,
               ylab='Coverage rate'))
-
 
