@@ -90,4 +90,3 @@ abline(h=beta1, col='dodgerblue2', lty='dashed')
 with(dat, plot(x=n, y=sigma, type='l', las=1, main=expression(hat(sigma))))
 abline(h=sig, col='dodgerblue2', lty='dashed')
 
-library(ggplot2)
