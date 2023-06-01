@@ -62,7 +62,7 @@ simul <- function(n) {
 # Aqui se definen los valores de tamano muestral n
 # Luego se define el numero de repeticiones
 n <- seq(from=20, to=300, by=20)
-nrep <- 10
+nrep <- 1000
 
 values <- expand.grid(n=n)
 values
