@@ -3,8 +3,6 @@ library(gamlss)
 # Vamos a definir el directorio de trabajo donde
 # se almacenaran el script, simulaciones y graficos
 
-setwd("Estudio_simul_nueva_dist")
-
 #-----------------------------------------------------------------
 #------------------ EJEMPLO CON LA DISTRIBUCION ------------------
 #----------------------- Zero inflated Poisson -------------------
@@ -30,10 +28,10 @@ true_sigma <- 0.26 # Cumple que 0 < sigma < 1
 simul_one <- function(size) {
   y <- rZIP(n=size, mu=true_mu, sigma=true_sigma)
   mod <- NULL
-  mod <- gamlss(y~1, sigma.fo=~1, family='ZIP',
+  mod <- gamlss(y~1, sigma.fo=~1, family="ZIP",
                 control=gamlss.control(n.cyc=2500, trace=FALSE))
-  res <- c(      exp(coef(mod, what='mu')), 
-           logit_inv(coef(mod, what='sigma')))
+  res <- c(      exp(coef(mod, what="mu")), 
+           logit_inv(coef(mod, what="sigma")))
   res
 }
 
@@ -41,7 +39,7 @@ simul_one <- function(size) {
 simul <- function(n) {
   result <- t(replicate(n=nrep, expr=simul_one(size=n)))
   result <- cbind(result, n)
-  write(x=t(result), file='simul_without_cov.txt', 
+  write(x=t(result), file="simul_without_cov.txt", 
         ncol=3, append=TRUE)
 }
 
@@ -58,8 +56,8 @@ apply(values, 1, simul)
 
 
 # Plots -------------------------------------------------------------------
-dt <- read.table('simul_without_cov.txt', 
-                 col.names=c('mu_hat', 'sigma_hat', 'n'))
+dt <- read.table("simul_without_cov.txt", 
+                 col.names=c("mu_hat", "sigma_hat", "n"))
 
 library(dplyr)
 library(tidyr)
@@ -86,12 +84,12 @@ res <- dt %>%
 p1 <- ggplot(data=res, aes(x=n, y=mean_mu)) + 
   geom_line() + 
   labs(x="n", y=expression(hat(mu))) +
-  geom_line(y=true_mu, col='red', lty='dashed')
+  geom_line(y=true_mu, col="red", lty="dashed")
 
 p2 <- ggplot(data=res, aes(x=n, y=mean_sigma)) + 
   geom_line() + 
   labs(x="n", y=expression(hat(sigma))) +
-  geom_line(y=true_sigma, col='red', lty='dashed')
+  geom_line(y=true_sigma, col="red", lty="dashed")
 
 mean1 <- grid.arrange(p1, p2, nrow = 1)
 mean1

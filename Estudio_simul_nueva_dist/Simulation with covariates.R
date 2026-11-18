@@ -3,8 +3,6 @@ library(gamlss)
 # Vamos a definir el directorio de trabajo donde
 # se almacenaran el script, simulaciones y graficos
 
-setwd("Estudio_simul_nueva_dist")
-
 #-----------------------------------------------------------------
 #------------------ EJEMPLO CON LA DISTRIBUCION ------------------
 #----------------------- Zero inflated Poisson -------------------
@@ -40,12 +38,12 @@ simul_one <- function(size) {
   sigma <- logit_inv(true_g0_si + true_g1_si * x2)
   y <- rZIP(n=size, mu=mu, sigma=sigma)
   mod <- NULL
-  mod <- try(gamlss(y~x1, sigma.fo=~x2, family='ZIP',
+  mod <- try(gamlss(y~x1, sigma.fo=~x2, family="ZIP",
                     control=gamlss.control(n.cyc=2500, trace=FALSE)))
   if (class(mod)[1] == "try-error")
     res <- rep(NA, 4)
   else
-    res <- c(coef(mod, what='mu'), coef(mod, what='sigma'))
+    res <- c(coef(mod, what="mu"), coef(mod, what="sigma"))
   res
 }
 
@@ -53,7 +51,7 @@ simul_one <- function(size) {
 simul <- function(n) {
   result <- t(replicate(n=nrep, expr=simul_one(size=n)))
   result <- cbind(result, n)
-  write(x=t(result), file='simul_with_cov.txt', 
+  write(x=t(result), file="simul_with_cov.txt", 
         ncol=5, append=TRUE)
 }
 
@@ -69,10 +67,10 @@ values
 apply(values, 1, simul)
 
 # Plots -------------------------------------------------------------------
-dt <- read.table('simul_with_cov.txt', 
-                 col.names=c('b0_mu_hat', 'b1_mu_hat', 
-                             'g0_si_hat', 'g1_si_hat', 
-                             'n'))
+dt <- read.table("simul_with_cov.txt", 
+                 col.names=c("b0_mu_hat", "b1_mu_hat", 
+                             "g0_si_hat", "g1_si_hat", 
+                             "n"))
 
 library(dplyr)
 library(tidyr)
@@ -102,25 +100,25 @@ p1 <- ggplot(data=res, aes(x=n, y=mean_b0_mu)) +
   geom_line() + 
   labs(x="n", y=expression(hat(beta)[0]), 
        title=expression("Mean for the intercept in" ~ mu)) +
-  geom_line(y=true_b0_mu, col='red', lty='dashed')
+  geom_line(y=true_b0_mu, col="red", lty="dashed")
 
 p2 <- ggplot(data=res, aes(x=n, y=mean_b1_mu)) + 
   geom_line() + 
   labs(x="n", y=expression(hat(beta)[1]),
        title=expression("Mean for the slope in" ~ mu)) +
-  geom_line(y=true_b1_mu, col='red', lty='dashed')
+  geom_line(y=true_b1_mu, col="red", lty="dashed")
 
 p3 <- ggplot(data=res, aes(x=n, y=mean_b0_si)) + 
   geom_line() + 
   labs(x="n", y=expression(hat(gamma)[0]),
        title=expression("Mean for the intercept in" ~ sigma)) +
-  geom_line(y=true_g0_si, col='red', lty='dashed')
+  geom_line(y=true_g0_si, col="red", lty="dashed")
 
 p4 <- ggplot(data=res, aes(x=n, y=mean_b1_si)) + 
   geom_line() + 
   labs(x="n", y=expression(hat(gamma)[1]),
        title=expression("Mean for the slope in" ~ sigma)) +
-  geom_line(y=true_g1_si, col='red', lty='dashed')
+  geom_line(y=true_g1_si, col="red", lty="dashed")
 
 mean2 <- grid.arrange(p1, p2, p3, p4, nrow=2, ncol=2)
 mean2
